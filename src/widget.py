@@ -1,9 +1,11 @@
 """импорт функций маскировки из папки masks.py"""
+
 from src.masks import get_mask_card_number
 
 from src.masks import get_mask_account
 
 print(get_mask_card_number)
+
 print(get_mask_account)
 
 
@@ -59,7 +61,10 @@ def mask_account_card(account_card_info: str) -> str:
 
         return f"{type_part} {masked_number}"
 
+
 """Преобразуем дату в формат ДД.ММ.ГГГГ"""
+
+
 # Разделяем строку по символу "T" и берем первую часть (дату)
 def get_date(date_string: str) -> str:
     date_part = date_string.split("T")[0]

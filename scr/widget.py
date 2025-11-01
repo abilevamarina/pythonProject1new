@@ -1,30 +1,4 @@
-def get_mask_card_number(card_number: str) -> str:
-    """
-    Возвращает скрытый номер карты в формате XXXX XX** **** XXXX
-    """
-    # Убираем все пробелы и нецифровые символы
-    cleaned_number = "".join(filter(str.isdigit, card_number))
-
-    if len(cleaned_number) != 16:
-        raise ValueError("Номер карты должен состоять из 16 цифр")
-
-    # Форматируем: первые 6, затем маскируем 6, показываем последние 4
-    return f"{cleaned_number[:4]} {cleaned_number[4:6]}** **** {cleaned_number[-4:]}"
-
-
-def get_mask_account(account_number: str) -> str:
-    """
-    Возвращает замаскированный номер аккаунта в формате **XXXX
-    """
-    # Убираем все пробелы и нецифровые символы
-    cleaned_number = "".join(filter(str.isdigit, account_number))
-
-    if len(cleaned_number) < 4:
-        raise ValueError("Номер счета должет состоять минимум из 4 цифр")
-
-    # Показываем только последние 4 цифры
-    return f"**{cleaned_number[-4:]}"
-
+from scr.masks import masks
 
 def mask_account_card(account_card_info: str) -> str:
     """ Возвращает cтроку с замаскированным числом и типом """

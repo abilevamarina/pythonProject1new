@@ -1,7 +1,14 @@
-from scr.masks import masks
+"""импорт функций маскировки из папки masks.py"""
+from scr.masks import get_mask_card_number
+
+from scr.masks import get_mask_account
+
+print(get_mask_card_number)
+print(get_mask_account)
+
 
 def mask_account_card(account_card_info: str) -> str:
-    """ Возвращает cтроку с замаскированным числом и типом """
+    """Возвращает cтроку с замаскированным числом и типом"""
     if not account_card_info:
         return ""
 
@@ -52,9 +59,10 @@ def mask_account_card(account_card_info: str) -> str:
 
         return f"{type_part} {masked_number}"
 
+
 def get_date(date_string: str) -> str:
-    date_part = date_string.split('T')[0]
-    year, month, day = date_part.split('-')
+    date_part = date_string.split("T")[0]
+    year, month, day = date_part.split("-")
 
     # Форматируем в нужный формат ДД.ММ.ГГГГ
     return f"{day}.{month}.{year}"

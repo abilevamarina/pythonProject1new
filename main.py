@@ -93,3 +93,6 @@ Commit contents options
                           read pathspec from file
     --[no-]pathspec-file-nul
                           with --pathspec-from-file, pathspec elements are separated with NUL character
+
+# новый проект
+# изменения

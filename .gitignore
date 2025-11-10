@@ -1,3 +1,5 @@
+ssh -T git@github.com
+ssh -T git@github.com.pub
 .idea/
 __pycache__
 # Byte-compiled / optimized / DLL files

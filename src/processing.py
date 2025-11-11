@@ -17,4 +17,4 @@ def sort_by_date(transactions, descending=True):
     Сортирует список словарей по дате
     """
     return sorted(transactions, key=lambda x: x.get('date', ''),
-        reverse=descending)
+                  reverse=descending)

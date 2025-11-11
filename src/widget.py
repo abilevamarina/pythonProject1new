@@ -35,12 +35,12 @@ def mask_account_card(account_card_info: str) -> str:
     # Определяем тип по ключевым словам и длине номера
     if "счет" in account_card_info.lower() or len(cleaned_number) > 16:
         # Обрабатываем как счет
-        masked_number = get_mask_account(cleaned_number)
+        masked_number = get_mask_account(int(cleaned_number))
     else:
         # Обрабатываем как карту
         if len(cleaned_number) != 16:
             raise ValueError("Номер карты должен состоять из 16 цифр")
-        masked_number = get_mask_card_number(cleaned_number)
+        masked_number = get_mask_card_number(int(cleaned_number))
 
     return f"{type_part} {masked_number}"
 

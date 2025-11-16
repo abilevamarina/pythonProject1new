@@ -44,19 +44,28 @@ def test_get_mask_account_invalid():
     ):
         get_mask_account(1)  # 1 цифра
 
+
 """Параметизация"""
-@pytest.mark.parametrize("input_card,expected", [
-    (1234567890123456, "1234 56** **** 3456"),
-])
-def test_get_mask_card_number_parametrized(self, input_card, expected):
+
+
+@pytest.mark.parametrize(
+    "input_card,expected",
+    [
+        (1234567890123456, "1234 56** **** 3456"),
+    ],
+)
+def test_get_mask_card_number_parametrized(input_card, expected):
     assert get_mask_card_number(input_card) == expected
 
 
-@pytest.mark.parametrize("input_account,expected", [
-    (1234567890, "**7890"),
-    (1234, "**1234"),
-    (100005000, "**5000"),
-    (9999999999, "**9999"),
-])
+@pytest.mark.parametrize(
+    "input_account,expected",
+    [
+        (1234567890, "**7890"),
+        (1234, "**1234"),
+        (100005000, "**5000"),
+        (9999999999, "**9999"),
+    ],
+)
 def test_get_mask_account_parametrized(input_account, expected):
-     assert get_mask_account(input_account) == expected
+    assert get_mask_account(input_account) == expected

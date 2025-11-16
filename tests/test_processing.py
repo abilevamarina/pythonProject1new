@@ -12,14 +12,15 @@ def sample_transactions():
         {"id": 4, "state": "EXECUTED", "amount": 500},
     ]
 
+
 @pytest.fixture
 def transactions_with_missing_state():
     """Фикстура с транзакциями, где у некоторых отсутствует ключ state"""
     return [
-            {"id": 1, "state": "EXECUTED", "amount": 100},
-            {"id": 2, "amount": 200},  # нет ключа state
-            {"id": 3, "amount": 400},  # нет ключа state
-            {"id": 4, "state": "EXECUTED", "amount": 500},
+        {"id": 1, "state": "EXECUTED", "amount": 100},
+        {"id": 2, "amount": 200},  # нет ключа state
+        {"id": 3, "amount": 400},  # нет ключа state
+        {"id": 4, "state": "EXECUTED", "amount": 500},
     ]
 
 
@@ -61,13 +62,13 @@ def test_all_transactions_missing_state():
     transactions = [
         {"id": 1, "amount": 100},
         {"id": 2, "amount": 200},
-       ]
+    ]
 
     result = filter_by_state(transactions, "EXECUTED")
     assert result == []
 
 
-#Параметризация
+# Параметризация
 @pytest.mark.parametrize(
     "state,expected_count,expected_ids",
     [
@@ -82,77 +83,75 @@ def test_filter_by_state_parametrized(
 
     assert len(result) == expected_count
     assert [i["id"] for i in result] == expected_ids
+    assert [1, 2, 4] == [1, 4]
 
 
 @pytest.fixture
 def sample_transaction():
     """Фикстура с примером транзакций для тестирования"""
     return [
-            {"id": 1, "date": "2025-01-15", "amount": 100},
-            {"id": 2, "date": "2025-03-20", "amount": 200},
-            {"id": 3, "date": "2025-01-10", "amount": 300},
-            {"id": 4, "date": "2025-02-05", "amount": 400},
-            {"id": 5, "date": "2025-03-01", "amount": 500},
+        {"id": 1, "date": "2025-01-15", "amount": 100},
+        {"id": 2, "date": "2025-03-20", "amount": 200},
+        {"id": 3, "date": "2025-01-10", "amount": 300},
+        {"id": 4, "date": "2025-02-05", "amount": 400},
+        {"id": 5, "date": "2025-03-01", "amount": 500},
     ]
+
 
 @pytest.fixture
 def transactions_with_invalid_formats():
     """Фикстура с транзакциями с некорректными или нестандартными форматами дат"""
     return [
-            {"id": 1, "date": "2025-01-15", "amount": 100},  # Корректный формат
-            {"id": 2, "date": "invalid-date-here", "amount": 200},  # Некорректная дата
-            {"id": 3, "date": "15.01.2025", "amount": 300},  # Корректный формат
-            {"id": 4, "date": "2025/12/31", "amount": 400},  # Возможный формат
-            {"id": 5, "date": "01-15-2025", "amount": 500},  # Допустимый формат
-            {"id": 6, "date": "", "amount": 600},  # Пустая строка
-            {"id": 7, "date": "20230115", "amount": 700},  # Без разделителей
-            {"id": 8, "date": "31-Дек-2025", "amount": 800},  # Месяц текстом
+        {"id": 1, "date": "2025-01-15", "amount": 100},  # Корректный формат
+        {"id": 2, "date": "invalid-date-here", "amount": 200},  # Некорректная дата
+        {"id": 3, "date": "15.01.2025", "amount": 300},  # Корректный формат
+        {"id": 4, "date": "2025/12/31", "amount": 400},  # Возможный формат
+        {"id": 5, "date": "01-15-2025", "amount": 500},  # Допустимый формат
+        {"id": 6, "date": "", "amount": 600},  # Пустая строка
+        {"id": 7, "date": "20230115", "amount": 700},  # Без разделителей
+        {"id": 8, "date": "31-Дек-2025", "amount": 800},  # Месяц текстом
     ]
+
 
 # ТЕСТ 1: Сортировка по убыванию
 def test_sort_descending_default(sample_transactions):
-    """Тестирование сортировки по датам в порядке убывания """
+    """Тестирование сортировки по датам в порядке убывания"""
     result = sort_by_date(sample_transactions)
 
-    expected_dates = ["2025-03-20", "2025-03-01", "2025-02-05", "2025-01-15", "2025-01-10"]
-    actual_dates = [transaction["date"] for transaction in result]
+    expected_dates = [
+        "2025-03-20",
+        "2025-03-01",
+        "2025-02-05",
+        "2025-01-15",
+        "2025-01-10",
+    ]
+    actual_dates = [transactions["date"] for transactions in result]
 
     assert actual_dates == expected_dates
     assert result[0]["id"] == 2  # Самая поздняя дата
     assert result[-1]["id"] == 3  # Самая ранняя дата
+
 
 # ТЕСТ 2: Сортировка по возрастанию
 def test_sort_ascending_explicit(sample_transactions):
     """Тестирование сортировки по датам в порядке возрастания"""
     result = sort_by_date(sample_transactions, descending=False)
 
-    expected_dates = ["2025-01-10", "2025-01-15", "2025-02-05", "2025-03-01", "2025-03-20"]
-    actual_dates = [transaction["date"] for transaction in result]
+    expected_dates = [
+        "2025-01-10",
+        "2025-01-15",
+        "2025-02-05",
+        "2025-03-01",
+        "2025-03-20",
+    ]
+    actual_dates = [transactions["date"] for transactions in result]
 
     assert actual_dates == expected_dates
     assert result[0]["id"] == 3  # Самая ранняя дата
     assert result[-1]["id"] == 2  # Самая поздняя дата
 
-# ТЕСТ 3: Проверка корректности сортировки при одинаковых датах
-def test_same_dates_preserve_order_descending(transactions_with_same_dates):
-    """Тестирование сортировки при одинаковых датах(убывание)"""
-    result = sort_by_date(transactions_with_same_dates, descending=True)
 
-    expected_order = [5, 1, 2, 4, 3]  # По датам, при одинаковых - исходный порядок
-    actual_order = [transaction["id"] for transaction in result]
-
-    assert actual_order == expected_order
-
-def test_same_dates_preserve_order_ascending(transactions_with_same_dates):
-    """Тестирование сортировки при одинаковых датах (возрастание)"""
-    result = sort_by_date(transactions_with_same_dates, descending=False)
-
-    expected_order = [3, 1, 2, 4, 5]  # По датам, при одинаковых - исходный порядок
-    actual_order = [transaction["id"] for transaction in result]
-
-    assert actual_order == expected_order
-
-# ТЕСТ 4: Работа с некорректными форматами дат
+# ТЕСТ 3: Работа с некорректными форматами дат
 def test_invalid_date_formats_descending(transactions_with_invalid_formats):
     """Тестирование сортировки с некорректными форматами дат (убывание)"""
     result = sort_by_date(transactions_with_invalid_formats, descending=True)
@@ -162,6 +161,7 @@ def test_invalid_date_formats_descending(transactions_with_invalid_formats):
 
     assert actual_dates == sorted(actual_dates, reverse=True)
 
+
 def test_invalid_date_formats_ascending(transactions_with_invalid_formats):
     """Тестирование сортировки с некорректными форматами дат (возрастание)"""
     result = sort_by_date(transactions_with_invalid_formats, descending=False)
@@ -170,13 +170,14 @@ def test_invalid_date_formats_ascending(transactions_with_invalid_formats):
 
     assert actual_dates == sorted(actual_dates, reverse=False)
 
+
 def test_specific_invalid_date_ordering():
     """Тестирование конкретного порядка некорректных дат"""
     transactions = [
-            {"id": 1, "date": "2023-01-15", "amount": 100},  # Корректная дата
-            {"id": 2, "date": "invalid", "amount": 200},  # Некорректная
-            {"id": 3, "date": "", "amount": 300},  # Пустая строка
-            {"id": 4, "date": "abc", "amount": 400},  # Некорректная
+        {"id": 1, "date": "2023-01-15", "amount": 100},  # Корректная дата
+        {"id": 2, "date": "invalid", "amount": 200},  # Некорректная
+        {"id": 3, "date": "", "amount": 300},  # Пустая строка
+        {"id": 4, "date": "abc", "amount": 400},  # Некорректная
     ]
 
     result = sort_by_date(transactions, descending=True)
@@ -195,41 +196,58 @@ def test_different_standard_formats():
 
     result = sort_by_date(transactions, descending=True)
     # Сортировка
-    actual_dates = [t["date"] for t in result]
+    actual_dates = [i["date"] for i in result]
 
     # Ожидаемый порядок
     expected_dates = ["31.12.2025", "2025-12-31", "20251231", "12/31/2025"]
     assert actual_dates == expected_dates
+    assert [2, 4, 1, 3] == [1, 4, 2, 3]
 
 
-#Параметизация
-@pytest.mark.parametrize("descending,expected_ids", [
-    (True, [2, 5, 4, 1, 3]),  # по убыванию
-    (False, [3, 1, 4, 5, 2]),  # по возрастанию
-    ])
+# Параметизация
+@pytest.mark.parametrize(
+    "descending,expected_ids",
+    [
+        (True, [2, 5, 4, 1, 3]),  # по убыванию
+        (False, [3, 1, 4, 5, 2]),  # по возрастанию
+    ],
+)
 def test_sort_direction_parametrized(sample_transactions, descending, expected_ids):
     """направление сортировки"""
     result = sort_by_date(sample_transactions, descending=descending)
     assert [i["id"] for i in result] == expected_ids
+    assert [1, 2, 3, 4] == [2, 5, 4, 1, 3]
 
-@pytest.mark.parametrize("transactions,expected_desc,expected_asc", [
-    # Пустой список
-    ([], [], []),
-    # Один элемент
-    ([{"id": 1, "date": "2025-01-01"}], [1], [1]),
-    # Все даты одинаковые
-    ([
-        {"id": 1, "date": "2025-01-01"},
-        {"id": 2, "date": "2025-01-01"},
-        {"id": 3, "date": "2025-01-01"}
-    ], [1, 2, 3], [1, 2, 3]),
-    # Только некорректные даты
-    ([
-        {"id": 1, "date": "invalid"},
-        {"id": 2, "date": "wrong"},
-        {"id": 3, "date": "error"}
-    ], [2, 1, 3], [3, 1, 2]),  # сортировка
-])
+
+@pytest.mark.parametrize(
+    "transactions,expected_desc,expected_asc",
+    [
+        # Пустой список
+        ([], [], []),
+        # Один элемент
+        ([{"id": 1, "date": "2025-01-01"}], [1], [1]),
+        # Все даты одинаковые
+        (
+            [
+                {"id": 1, "date": "2025-01-01"},
+                {"id": 2, "date": "2025-01-01"},
+                {"id": 3, "date": "2025-01-01"},
+            ],
+            [1, 2, 3],
+            [1, 2, 3],
+        ),
+        # Только некорректные даты
+        (
+            [
+                {"id": 1, "date": "invalid"},
+                {"id": 2, "date": "wrong"},
+                {"id": 3, "date": "error"},
+            ],
+            [2, 1, 3],
+            [3, 1, 2],
+        ),  # сортировка
+    ],
+)
 def test_various_scenarios_parametrized(transactions, expected_desc, expected_asc):
     """тестирование различных сценариев"""
     result_desc = sort_by_date(transactions, descending=True)

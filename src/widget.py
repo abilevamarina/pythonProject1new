@@ -16,7 +16,7 @@ def mask_account_card(account_card_info: str) -> str:
     words = account_card_info.split()
 
     if len(words) < 2:
-        raise ValueError("Input string must contain at least type and number")
+        raise ValueError("строка должна содержать как минимум тип и номер")
 
     # Извлекаем номер (последнее слово)
     number_part = words[-1]
@@ -51,11 +51,11 @@ def mask_account_card(account_card_info: str) -> str:
     if not cleaned_number:
         raise ValueError("Нужно ввести цифры")
     if "счет" in account_card_info.lower() or len(cleaned_number) > 16:
-        masked_number = get_mask_account(cleaned_number)
+        masked_number = get_mask_card_number(int(cleaned_number))
     else:
         if len(cleaned_number) != 16:
             raise ValueError("Номер карты должен содержать 16 цифр")
-        masked_number = get_mask_card_number(cleaned_number)
+        masked_number = get_mask_card_number(int(cleaned_number))
 
         return f"{type_part} {masked_number}"
 

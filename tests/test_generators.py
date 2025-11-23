@@ -1,6 +1,6 @@
+from src.generators import (card_number_generator, filter_by_currency,
+                            transaction_descriptions)
 from tests.conftest import pytest
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
-
 
 #Тесты для filter_by_currency
 def test_filter_usd_transactions():

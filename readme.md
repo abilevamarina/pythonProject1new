@@ -299,3 +299,193 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           file: ./coverage.xml
+
+# Набор утилит для работы с банковскими транзакциями и генерации номеров карт.
+
+## Функции
+filter_by_currency
+Фильтрует транзакции по заданной валюте и возвращает итератор.
+
+python
+def filter_by_currency(transactions: list[dict], currency: str) -> Iterator[dict]
+Параметры:
+
+transactions - список словарей с транзакциями
+
+currency - валюта для фильтрации (например, 'USD', 'EUR', 'RUB')
+
+Возвращает:
+
+Итератор, который выдает транзакции с заданной валютой
+
+Пример использования:
+
+python
+transactions = [
+    {"id": 1, "amount": 100, "currency": "USD"},
+    {"id": 2, "amount": 50, "currency": "EUR"},
+    {"id": 3, "amount": 200, "currency": "USD"},
+]
+
+usd_transactions = filter_by_currency(transactions, "USD")
+for transaction in usd_transactions:
+    print(transaction)
+# Вывод: 
+# {'id': 1, 'amount': 100, 'currency': 'USD'}
+# {'id': 3, 'amount': 200, 'currency': 'USD'}
+transaction_descriptions
+Генератор, который возвращает описание каждой транзакции по очереди.
+
+python
+def transaction_descriptions(transactions: list[dict]) -> Iterator[str]
+Параметры:
+
+transactions - список словарей с транзакциями
+
+Возвращает:
+
+Итератор с описаниями транзакций
+
+Пример использования:
+
+python
+transactions = [
+    {"id": 1, "description": "Payment for services"},
+    {"id": 2, "description": "Grocery shopping"},
+    {"id": 3, "description": "Salary"},
+]
+
+descriptions = transaction_descriptions(transactions)
+for desc in descriptions:
+    print(desc)
+# Вывод:
+# Payment for services
+# Grocery shopping
+# Salary
+card_number_generator
+Генератор номеров банковских карт в заданном диапазоне.
+
+python
+def card_number_generator(start: int, end: int) -> Iterator[str]
+Параметры:
+
+start - начальный номер карты (от 1 до 9999999999999999)
+
+end - конечный номер карты (от 1 до 9999999999999999)
+
+Возвращает:
+
+Итератор с номерами карт в формате "XXXX XXXX XXXX XXXX"
+
+Пример использования:
+
+python
+card_numbers = card_number_generator(1, 5)
+for card in card_numbers:
+    print(card)
+# Вывод:
+# 0000 0000 0000 0001
+# 0000 0000 0000 0002
+# 0000 0000 0000 0003
+# 0000 0000 0000 0004
+# 0000 0000 0000 0005
+
+## Тестирование
+Запуск тестов
+bash
+# Запуск всех тестов
+python bank_functions.py
+
+# Или с использованием pytest
+pytest test_bank_functions.py -v
+Описание тестов
+Тесты для filter_by_currency
+test_filter_usd_transactions - фильтрация USD транзакций
+
+test_filter_eur_transactions - фильтрация EUR транзакций
+
+test_no_matching_currency - когда нет подходящих транзакций
+
+test_empty_transactions_list - работа с пустым списком
+
+test_transactions_without_currency_field - транзакции без поля currency
+
+test_returns_iterator - проверка типа возвращаемого значения
+
+Тесты для transaction_descriptions
+test_extract_descriptions - извлечение описаний транзакций
+
+test_empty_descriptions - работа с пустыми описаниями
+
+test_missing_description_field - транзакции без поля description
+
+test_mixed_transactions - смешанные транзакции
+
+test_returns_generator - проверка типа возвращаемого значения
+
+Тесты для card_number_generator
+test_small_range - генерация небольшого диапазона
+
+test_large_numbers - генерация больших номеров
+
+test_middle_range - номера в середине диапазона
+
+test_single_number - генерация одного номера
+
+test_format_consistency - проверка формата вывода
+
+test_returns_generator - проверка типа возвращаемого значения
+
+Интеграционные тесты
+test_combined_usage - совместное использование функций
+
+test_performance_large_range - производительность на большом диапазоне
+
+Пример тестовых данных
+python
+SAMPLE_TRANSACTIONS = [
+    {
+        "id": 939719570,
+        "state": "EXECUTED", 
+        "date": "2018-06-30T02:08:58.425572",
+        "operationAmount": {
+            "amount": "9824.07",
+            "currency": {"name": "USD", "code": "USD"}
+        },
+        "description": "Перевод организации",
+        "from": "Счет 75106830613657916952", 
+        "to": "Счет 11776614605963066702"
+    },
+    {
+        "id": 142264268,
+        "state": "EXECUTED",
+        "date": "2019-04-04T23:20:05.206878", 
+        "operationAmount": {
+            "amount": "79114.93",
+            "currency": {"name": "USD", "code": "USD"}
+        },
+        "description": "Перевод со счета на счет",
+        "from": "Счет 19708645243227258542",
+        "to": "Счет 75651667383060284188"
+    }
+]
+## Требования
+Python 3.6+
+
+Для тестирования: pytest (опционально)
+
+### Особенности
+Ленивые вычисления - функции возвращают итераторы, экономя память
+
+Безопасность - использование .get() для избежания KeyError
+
+Типизация - правильные аннотации типов для статического анализа
+
+Производительность - эффективная работа с большими объемами данных
+
+### Примечания
+Все функции работают с итераторами, что позволяет обрабатывать большие наборы данных
+
+Для получения списка результатов используйте list()
+
+Функции безопасно обрабатывают отсутствующие поля в словарях

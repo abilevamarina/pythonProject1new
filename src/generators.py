@@ -1,4 +1,5 @@
-from typing import Iterator
+from src.iter import Iterator
+
 
 def filter_by_currency(transactions: list[dict], currency: str) -> Iterator[dict]:
     """
@@ -15,11 +16,11 @@ def transaction_descriptions(transactions: list[dict]) -> Iterator[str]:
     for transaction in transactions:
         yield transaction.get("description", "")
 
-def card_number_generator(start: int, end: int) -> Iterator[str]:
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
     """
     Генератор номеров банковских карт в заданном диапазоне.
     """
-    for number in range(start, end + 1):
+    for number in range(start, stop + 1):
         # Преобразуем в строку и дополняем нулями
         card_str = str(number)
         if len(card_str) < 16:

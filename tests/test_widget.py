@@ -11,8 +11,8 @@ from tests.conftest import pytest
         ("MasterCard 9999888877776666", "MasterCard 9999 88** **** 6666"),
         ("МИР 1234123412341234", "МИР 1234 12** **** 1234"),
         ("Maestro 1234567890123456", "Maestro 1234 56** **** 3456"),
-    ])
-
+    ],
+)
 def test_card_masking(input_str, expected):
     """Тестирование маскировки номеров карт"""
     result = mask_account_card(input_str)

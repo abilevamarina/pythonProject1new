@@ -200,7 +200,7 @@ def test_different_standard_formats():
     actual_ids = [i["id"] for i in result]
 
     # Ожидаемый порядок
-    assert actual_dates == ['31.12.2025', '20251231', '2025-12-31', '12/31/2025']
+    assert actual_dates == ["31.12.2025", "20251231", "2025-12-31", "12/31/2025"]
 
 
 # Параметизация

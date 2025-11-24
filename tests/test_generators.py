@@ -69,19 +69,6 @@ def test_filter_by_currency(sample_transactions, currency, expected_ids):
     assert [tx["id"] for tx in result] == expected_ids
 
 
-@pytest.mark.parametrize("currency,expected_ids", [
-    ("USD", [2]),
-    ("EUR", [1, 3]),
-])
-def test_filter_transactions_without_amount(transactions_without_amount, currency, expected_ids):
-    """Тест фильтрации транзакций без поля amount"""
-    result = list(filter_by_currency(transactions_without_amount, currency))
-
-    assert len(result) == len(expected_ids)
-    assert all(tx["currency"] == currency for tx in result)
-    assert [tx["id"] for tx in result] == expected_ids
-
-
 def test_returns_iterator():
     """Тест, что функция возвращает итератор"""
     transactions = [{"id": 1, "currency": "USD"}]

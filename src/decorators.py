@@ -2,10 +2,14 @@ import functools
 from datetime import datetime
 
 
-def log(temp_filename=None):
-    def decorator(func):  # Принимает функцию в качестве аргумента
+def log(temp_filename=None):  # Должен принимать параметр filename
+    """
+    Декоратор для логирования
+    """
+
+    def decorator(func):  # Внутренняя функция, принимающая декорируемую функцию
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs):  # Функция-обёртка
             func_name = func.__name__
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -22,6 +26,7 @@ def log(temp_filename=None):
                 _log_message(success_message, temp_filename)
 
                 return result  # Возвращаем результат функции
+
             except Exception as e:
                 # Логируем ошибку
                 error_message = (
@@ -37,10 +42,10 @@ def log(temp_filename=None):
     return decorator  # Возвращаем декоратор
 
 
-def _log_message(message, filename):
+def _log_message(message, temp_filename):
     """Вспомогательная функция"""
-    if filename:
-        with open(filename, 'a', encoding='utf-8') as f:
+    if temp_filename:
+        with open(temp_filename, 'a', encoding='utf-8') as f:
             f.write(message + '\n')
     else:
         print(message)

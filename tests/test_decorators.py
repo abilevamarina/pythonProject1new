@@ -51,11 +51,9 @@ def test_log_to_file_success():
         temp_filename = f.name
 
     try:
-
-        @log(filename=temp_filename)
+        @log(temp_filename=temp_filename)
         def add(a, b):
             return a + b
-
         result = add(3, 7)
         assert result == 10
 
@@ -86,9 +84,8 @@ def test_log_to_file_exception():
         temp_filename = f.name
 
     try:
-
-        @log(filename=temp_filename)
-        def raise_value_error(a, b):
+        @log(temp_filename=temp_filename)
+        def raise_value_error(x, y):
             raise ValueError("Custom error message")
 
         with pytest.raises(ValueError):

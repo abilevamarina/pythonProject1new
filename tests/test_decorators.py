@@ -1,6 +1,6 @@
-from src.decorators import log
-from tests.conftest import pytest, tempfile, os
 from datetime import datetime
+from src.decorators import log
+from tests.conftest import os, pytest, tempfile
 
 
 class TestLogDecorator:

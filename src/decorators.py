@@ -2,33 +2,26 @@ import functools
 from datetime import datetime
 
 
-def log(filename=None):
-    """
-    Декоратор для логирования начала и конца выполнения функции,
-    а также результатов или ошибок.
-    """
-
-    def decorator(func):
+def log(temp_filename=None):
+    def decorator(func):  # Принимает функцию в качестве аргумента
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            # Формируем информацию о вызове функции
             func_name = func.__name__
-            timestamp = datetime.now().strftime("Y-m-d H:M:S")
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             # Логируем начало выполнения
             start_message = f"[{timestamp}] Функция '{func_name}' начала выполнение"
-            log_message(start_message, filename)
+            _log_message(start_message, temp_filename)
 
             try:
-                # Выполняем функцию
+                # Выполняем оригинальную функцию
                 result = func(*args, **kwargs)
 
                 # Логируем успешное завершение
                 success_message = f"[{timestamp}] Функция '{func_name}' успешно завершилась. Результат: {result}"
-                log_message(success_message, filename)
+                _log_message(success_message, temp_filename)
 
-                return result
-
+                return result  # Возвращаем результат функции
             except Exception as e:
                 # Логируем ошибку
                 error_message = (
@@ -37,22 +30,17 @@ def log(filename=None):
                     f"  - Сообщение: {str(e)}\n"
                     f"  - Аргументы: args={args}, kwargs={kwargs}"
                 )
-                log_message(error_message, filename)
+                _log_message(error_message, temp_filename)
+                raise  # Пробрасываем исключение дальше
 
-                # Пробрасываем исключение дальше
-                raise
-
-        return wrapper
-
-    return decorator
+        return wrapper  # Возвращаем функцию-обёртку
+    return decorator  # Возвращаем декоратор
 
 
-def log_message(message, filename):
-    """Вспомогательная функция для записи лога в файл или консоль"""
+def _log_message(message, filename):
+    """Вспомогательная функция"""
     if filename:
-        # Записываем в файл
-        with open(filename, "a") as f:
-            f.write(message + "\n")
+        with open(filename, 'a', encoding='utf-8') as f:
+            f.write(message + '\n')
     else:
-        # Выводим в консоль
         print(message)

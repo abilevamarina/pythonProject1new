@@ -5,7 +5,6 @@ from src.generators import (
 )
 from tests.conftest import pytest
 
-
 """Тесты для filter_by_currency"""
 
 
@@ -54,11 +53,14 @@ def sample_transactions():
     ]
 
 
-@pytest.mark.parametrize("currency,expected_ids", [
-    ("USD", [1, 3]),
-    ("EUR", [2, 4]),
-    ("JPY", []),  # Тест для валюты, которой нет в списке
-])
+@pytest.mark.parametrize(
+    "currency,expected_ids",
+    [
+        ("USD", [1, 3]),
+        ("EUR", [2, 4]),
+        ("JPY", []),  # Тест для валюты, которой нет в списке
+    ],
+)
 def test_filter_by_currency(sample_transactions, currency, expected_ids):
     """Параметризованный тест фильтрации транзакций по валюте"""
     result = list(filter_by_currency(sample_transactions, currency))
@@ -131,19 +133,37 @@ def transactions_with_empty_descriptions():
     ]
 
 
-@pytest.mark.parametrize("expected_descriptions", [
-    (["Оплата услуг", "Покупка продуктов", "Зарплата", "Перевод другу", "Оплата ЖКХ"]),
-])
-def test_extract_descriptions(sample_transactions_with_descriptions, expected_descriptions):
+@pytest.mark.parametrize(
+    "expected_descriptions",
+    [
+        (
+            [
+                "Оплата услуг",
+                "Покупка продуктов",
+                "Зарплата",
+                "Перевод другу",
+                "Оплата ЖКХ",
+            ]
+        ),
+    ],
+)
+def test_extract_descriptions(
+    sample_transactions_with_descriptions, expected_descriptions
+):
     """Параметризованный тест извлечения описаний транзакций"""
     result = list(transaction_descriptions(sample_transactions_with_descriptions))
     assert result == expected_descriptions
 
-@pytest.mark.parametrize("expected_descriptions", [
-    (["", "", ""]),])
 
-
-def test_empty_descriptions(transactions_with_empty_descriptions, expected_descriptions):
+@pytest.mark.parametrize(
+    "expected_descriptions",
+    [
+        (["", "", ""]),
+    ],
+)
+def test_empty_descriptions(
+    transactions_with_empty_descriptions, expected_descriptions
+):
     """Тест с пустыми описаниями"""
     result = list(transaction_descriptions(transactions_with_empty_descriptions))
     assert result == expected_descriptions
@@ -191,6 +211,7 @@ def test_middle_range():
 
     assert result == expected
 
+
 @pytest.fixture
 def middle_range():
     """Фикстура для среднего диапазона"""
@@ -215,39 +236,66 @@ def test_format_consistency():
     assert all(len(part) == 4 for part in parts)
 
 
-@pytest.mark.parametrize("start,stop,expected", [
-    (1, 3, [
-        "0000 0000 0000 0001",
-        "0000 0000 0000 0002",
-        "0000 0000 0000 0003",
-    ]),
-    (1234567890123456, 1234567890123458, [
-        "1234 5678 9012 3456",
-        "1234 5678 9012 3457",
-        "1234 5678 9012 3458",
-    ]),
-    (9999999999999998, 9999999999999999, [
-        "9999 9999 9999 9998",
-        "9999 9999 9999 9999",
-    ]),
-    (0, 1, [
-        "0000 0000 0000 0000",
-        "0000 0000 0000 0001",
-    ]),
-    (42, 42, [
-        "0000 0000 0000 0042",
-    ]),])
+@pytest.mark.parametrize(
+    "start,stop,expected",
+    [
+        (
+            1,
+            3,
+            [
+                "0000 0000 0000 0001",
+                "0000 0000 0000 0002",
+                "0000 0000 0000 0003",
+            ],
+        ),
+        (
+            1234567890123456,
+            1234567890123458,
+            [
+                "1234 5678 9012 3456",
+                "1234 5678 9012 3457",
+                "1234 5678 9012 3458",
+            ],
+        ),
+        (
+            9999999999999998,
+            9999999999999999,
+            [
+                "9999 9999 9999 9998",
+                "9999 9999 9999 9999",
+            ],
+        ),
+        (
+            0,
+            1,
+            [
+                "0000 0000 0000 0000",
+                "0000 0000 0000 0001",
+            ],
+        ),
+        (
+            42,
+            42,
+            [
+                "0000 0000 0000 0042",
+            ],
+        ),
+    ],
+)
 def test_card_number_generator(start, stop, expected):
     """Параметризованный тест генерации номеров карт"""
     result = list(card_number_generator(start, stop))
     assert result == expected
 
 
-@pytest.mark.parametrize("start,stop", [
-    (1, 5),
-    (100, 104),
-    (9999999999999995, 9999999999999999),
-])
+@pytest.mark.parametrize(
+    "start,stop",
+    [
+        (1, 5),
+        (100, 104),
+        (9999999999999995, 9999999999999999),
+    ],
+)
 def test_format_consistency(start, stop):
     """Параметризованный тест формата вывода"""
     numbers = list(card_number_generator(start, stop))

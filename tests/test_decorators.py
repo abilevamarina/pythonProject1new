@@ -1,6 +1,6 @@
-from datetime import datetime
 from src.decorators import log
-from tests.conftest import pytest, tempfile, os, re
+from tests.conftest import pytest, tempfile, os
+from datetime import datetime
 
 
 class TestLogDecorator:
@@ -47,10 +47,11 @@ def test_log_to_console_exception(capsys):
 def test_log_to_file_success():
     """Тест успешного выполнения функции с записью в файл"""
     # Создаем временный файл с бинарным режимом для избежания проблем с кодировкой
-    with tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.txt') as f:
+    with tempfile.NamedTemporaryFile(mode="wb", delete=False, suffix=".txt") as f:
         temp_filename = f.name
 
     try:
+
         @log(filename=temp_filename)
         def add(a, b):
             return a + b
@@ -59,17 +60,17 @@ def test_log_to_file_success():
         assert result == 10
 
         # Читаем файл в бинарном режиме и декодируем с обработкой ошибок
-        with open(temp_filename, 'rb') as f:
+        with open(temp_filename, "rb") as f:
             binary_content = f.read()
 
         # Пытаемся декодировать разными способами
         try:
-            file_content = binary_content.decode('utf-8')
+            file_content = binary_content.decode("utf-8")
         except UnicodeDecodeError:
             try:
-                file_content = binary_content.decode('cp1251')
+                file_content = binary_content.decode("cp1251")
             except UnicodeDecodeError:
-                file_content = binary_content.decode('utf-8', errors='replace')
+                file_content = binary_content.decode("utf-8", errors="replace")
 
         assert "Функция 'add' начала выполнение" in file_content
         assert "Функция 'add' успешно завершилась. Результат: 10" in file_content
@@ -81,10 +82,11 @@ def test_log_to_file_success():
 
 def test_log_to_file_exception():
     """Тест обработки исключения с записью в файл"""
-    with tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.txt') as f:
+    with tempfile.NamedTemporaryFile(mode="wb", delete=False, suffix=".txt") as f:
         temp_filename = f.name
 
     try:
+
         @log(filename=temp_filename)
         def raise_value_error(a, b):
             raise ValueError("Custom error message")
@@ -93,17 +95,17 @@ def test_log_to_file_exception():
             raise_value_error(1, 2)
 
         # Читаем файл в бинарном режиме
-        with open(temp_filename, 'rb') as f:
+        with open(temp_filename, "rb") as f:
             binary_content = f.read()
 
         # Декодируем с обработкой ошибок
         try:
-            file_content = binary_content.decode('utf-8')
+            file_content = binary_content.decode("utf-8")
         except UnicodeDecodeError:
             try:
-                file_content = binary_content.decode('cp1251')
+                file_content = binary_content.decode("cp1251")
             except UnicodeDecodeError:
-                file_content = binary_content.decode('utf-8', errors='replace')
+                file_content = binary_content.decode("utf-8", errors="replace")
 
         assert "Функция 'raise_value_error' начала выполнение" in file_content
         assert "Функция 'raise_value_error' завершилась с ошибкой" in file_content
@@ -114,6 +116,7 @@ def test_log_to_file_exception():
     finally:
         if os.path.exists(temp_filename):
             os.unlink(temp_filename)
+
 
 def test_log_preserves_function_metadata():
     """Тест сохранения метаданных оригинальной функции"""

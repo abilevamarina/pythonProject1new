@@ -84,7 +84,7 @@ def test_returns_iterator():
 """Тесты для transaction_descriptions"""
 
 
-def test_extract_descriptions():
+def test_extract_description():
     """Тест извлечения описаний транзакций"""
     transactions = [
         {"id": 1, "description": "Оплата услуг"},
@@ -98,7 +98,7 @@ def test_extract_descriptions():
     assert result == expected
 
 
-def test_empty_descriptions():
+def test_empty_description():
     """Тест с пустыми описаниями"""
     transactions = [
         {"id": 1, "description": ""},
@@ -218,7 +218,7 @@ def middle_range():
     return 1234567890123456, 1234567890123458
 
 
-def test_format_consistency():
+def test_format_consist():
     """Тест формата вывода"""
     numbers = list(card_number_generator(1, 1))
     card_number = numbers[0]
